@@ -49,7 +49,7 @@ jobs:
 
       - run: echo "Run this if success upgrade"
 
-      - uses: stefanzweifel/git-auto-commit-action@v4
-        if: ${{ (github.event.client_payload.FORCERC == 'true' || !contains(steps.version.outputs.tag, '-rc.')) && github.event.client_payload.VERSION != steps.version.outputs.tag }}
-        with:
-          commit_message: Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}
+#      - uses: stefanzweifel/git-auto-commit-action@v4
+#        if: ${{ (github.event.client_payload.FORCERC == 'true' || !contains(steps.version.outputs.tag, '-rc.')) && github.event.client_payload.VERSION != steps.version.outputs.tag }}
+#        with:
+#          commit_message: Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}
