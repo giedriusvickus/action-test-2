@@ -5,8 +5,28 @@
     "repository": "git@github.com:giedriusvickus/action-test-2.git",
     "author": "Giedrius Vickus <giedrius.vickus@gmail.com>",
     "license": "MIT",
+    "scripts": {
+        "dev": "cross-env REACT_APP_ENV=development PORT=3001 NODE_ENV=dev node index.js"
+    },
+    "keywords": [
+        "SEO",
+        "dappradar",
+        "NodeJs"
+    ],
     "dependencies": {
-        "prettier": "^2.8.1",
-        "action-test-1": "1.0.1-rc.1"
+        "@octokit/core": "^4.1.0",
+        "axios": "^0.27.2",
+        "cross-env": "^7.0.3",
+        "dotenv": "^16.0.0",
+        "esm": "^3.2.25",
+        "express": "^4.17.3",
+        "fs-extra": "^10.0.1"
+    },
+    "devDependencies": {
+        "prettier": "^2.7.1"
+    },
+    "prettier": {
+        "printWidth": 100,
+        "tabWidth": 4
     }
 }
