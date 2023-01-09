@@ -21,11 +21,11 @@ jobs:
                     token: ${{ secrets.AUTH_TOKEN }}
                     cache: 'yarn'
 
-            -   run: echo "Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}" >> lib/test.txt
-            -   run: echo "Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}" >> lib/test.lock
+            -   run: echo "Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}" >> ./test.txt
+            -   run: echo "Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}" >> ./test.lock
 
             -   uses: stefanzweifel/git-auto-commit-action@v4
                 if: ${{ (github.event.client_payload.FORCERC == 'true' || !contains(steps.version.outputs.tag, '-rc.')) && github.event.client_payload.VERSION != steps.version.outputs.tag }}
                 with:
                     commit_message: Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}
-                    file_pattern: 'lib/*.lock'
+                    file_pattern: './*.lock'
