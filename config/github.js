@@ -30,4 +30,44 @@ const Github = async (request, response) => {
     response.redirect(302, `https://github.com/dappradar/${repo}/actions/workflows/${workflowId}`);
 };
 
+export const getReleases = async (request, response) => {
+    const octokit = new Octokit({
+        auth: process.env.GITHUB_TOKEN,
+    });
+
+    octokit.hook.error("request", async (error) => {
+        console.log(error);
+    });
+
+    const releases = await octokit.request("GET /repos/giedriusvickus/action-test-1/releases", {
+        owner: "giedriusvickus",
+        repo: "action-test-1",
+    });
+
+    const drafts = releases.data.map((release) => {
+        if (release.prerelease) {
+            console.log({ name: release.name, tag: release.tag_name });
+        }
+        //console.log(release.draft);
+        return release.prerelease && release;
+    });
+
+    printJson(response, drafts, 200);
+};
+
 export default Github;
+
+export function printJson(response, object, status = 200) {
+    response.setHeader("Content-Type", "application/json");
+    response.setHeader("Cache-Control", "public, max-age=360");
+    response.setHeader("X-Frame-Options", "DENY");
+    response.setHeader("Content-Security-Policy", "frame-ancestors 'none'");
+
+    if (status !== 200) {
+        response.status(status);
+    }
+
+    const json = JSON.stringify(object);
+
+    response.send(json);
+}
