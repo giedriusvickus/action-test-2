@@ -5,9 +5,11 @@ on:
         types: [ promote ]
 
 jobs:
-    Bump:
+    bump:
         name: Bump package version & commit
         runs-on: ubuntu-latest
+        outputs:
+            commit-sha: ${{ steps.auto-commit.outputs.commit_hash }}
 
         strategy:
             matrix:
@@ -22,10 +24,28 @@ jobs:
                     cache: 'yarn'
 
             -   run: echo "Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}" >> ./test.txt
-            -   run: echo "Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}" >> ./test.lock
+#            -   run: echo "Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}" >> ./test.lock
 
             -   uses: stefanzweifel/git-auto-commit-action@v4
+                id: auto-commit
                 if: ${{ (github.event.client_payload.FORCERC == 'true' || !contains(steps.version.outputs.tag, '-rc.')) && github.event.client_payload.VERSION != steps.version.outputs.tag }}
                 with:
                     commit_message: Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}
                     file_pattern: './*.lock'
+
+    dispatch:
+        name: Dispatch master workflow
+        needs: bump
+        if: needs.bump.outputs.commit-sha
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Trigger build
+                uses: passeidireto/trigger-external-workflow-action@main
+                env:
+                    PAYLOAD_COMMIT_MSG: Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}
+                    PAYLOAD_COMMIT_SHA: ${{ needs.bump.outputs.commit-sha }}
+                with:
+                    repository: giedriusvickus/action-test-2
+                    event: after-commit
+                    github_pat: ${{ secrets.AUTH_TOKEN }}

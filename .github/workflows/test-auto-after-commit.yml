@@ -1,0 +1,12 @@
+name: After Auto commit job
+
+on:
+    repository_dispatch:
+        types: [ after-commit ]
+
+jobs:
+    after-commit:
+        runs-on: ubuntu-latest
+
+        steps:
+            -   run: echo "Commit SHA - ${{ github.event.client_payload.COMMIT_SHA }}"
