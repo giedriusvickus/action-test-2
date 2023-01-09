@@ -51,14 +51,16 @@ jobs:
                     ref: ${{ matrix.branch }}
                     token: ${{ secrets.AUTH_TOKEN }}
 
-            -   name: Use Node.js ${{ matrix.node-version }}
-                uses: actions/setup-node@v3
-                with:
-                    node-version: ${{ matrix.node-version }}
-                    cache: 'yarn'
+#            -   name: Use Node.js ${{ matrix.node-version }}
+#                uses: actions/setup-node@v3
+#                with:
+#                    node-version: ${{ matrix.node-version }}
+#                    cache: 'yarn'
+            -   run: echo "@dappradar:registry=https://npm.pkg.github.com" >> .npmrc && echo "//npm.pkg.github.com/:_authToken=${{ secrets.AUTH_TOKEN }}" >> .npmrc
 
-            -   name: Yarn timeout config
-                run: yarn config set network-timeout 300000
+
+            #            -   name: Yarn timeout config
+#                run: yarn config set network-timeout 300000
 
             #      - name: Install dependencies
             #        if: ${{ (github.event.client_payload.FORCERC == 'true' || !contains(steps.version.outputs.tag, '-rc.')) && github.event.client_payload.VERSION != steps.version.outputs.tag }}
