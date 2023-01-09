@@ -23,8 +23,8 @@ jobs:
                     token: ${{ secrets.AUTH_TOKEN }}
                     cache: 'yarn'
 
-            -   run: echo "Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}" >> ./test.txt
-#            -   run: echo "Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}" >> ./test.lock
+#            -   run: echo "Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}" >> ./test.txt
+            -   run: echo "Automatic version bump ${{ github.event.client_payload.LIBRARY }}@${{ github.event.client_payload.VERSION }}" >> ./test.lock
 
             -   uses: stefanzweifel/git-auto-commit-action@v4
                 id: auto-commit
